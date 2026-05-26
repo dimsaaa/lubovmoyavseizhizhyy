@@ -1,0 +1,160 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #000000;
+  --fg: #ffffff;
+  --muted: rgba(255, 255, 255, 0.38);
+  --ease: cubic-bezier(0.45, 0, 0.15, 1);
+  --duration: 0.75s;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Белая тема: раскомментируй блок ниже и закомментируй :root выше
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: rgba(0, 0, 0, 0.35);
+}
+*/
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 2rem 1.5rem 3rem;
+  text-align: center;
+}
+
+.stage__hit {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.stage__hit:focus-visible {
+  outline: 1px solid var(--muted);
+  outline-offset: 12px;
+}
+
+.number {
+  display: block;
+  font-size: clamp(6rem, 28vw, 13rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+  will-change: opacity, transform;
+}
+
+.caption {
+  max-width: 22rem;
+  margin-top: clamp(2rem, 5vh, 3.5rem);
+  font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease);
+  will-change: opacity, transform;
+}
+
+.hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 0;
+  right: 0;
+  font-size: 0.65rem;
+  font-style: normal;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: opacity 0.6s ease;
+}
+
+.hint.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.progress {
+  position: absolute;
+  bottom: 2.5rem;
+  font-size: 0.65rem;
+  font-style: normal;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.progress.is-visible {
+  opacity: 1;
+}
+
+/* Переход между слайдами */
+.stage.is-leaving .number,
+.stage.is-leaving .caption {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.stage.is-entering .number,
+.stage.is-entering .caption {
+  opacity: 0;
+  transform: translateY(-14px);
+}
+
+.stage.is-active .number,
+.stage.is-active .caption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number,
+  .caption,
+  .hint,
+  .progress {
+    transition: opacity 0.2s ease;
+  }
+
+  .stage.is-leaving .number,
+  .stage.is-leaving .caption,
+  .stage.is-entering .number,
+  .stage.is-entering .caption {
+    transform: none;
+  }
+}
